@@ -4,7 +4,7 @@ export class Controller {
         if (req.url === "/") {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.end("\"Cats live here!\"");
+            return "\"Cats live here!\"";
         } else if (req.url === "/cats") {
             if (req.method !== "GET") {
                 res.statusCode = 405;
@@ -27,10 +27,9 @@ export class Controller {
                     "fur": "fluffy",
                 },
             ];
-            res.end(JSON.stringify(cats));
+            return JSON.stringify(cats);
         } else {
             res.statusCode = 404;
-            res.end();
         }
     }
 }
