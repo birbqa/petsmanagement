@@ -1,12 +1,12 @@
 import * as http from 'http';
-import {Controller} from "./controller.js";
+import {Router} from "./router.js";
 
 const hostname = '127.0.0.1';
 const port = 3000;
 
 const server = http.createServer((req, res) => {
-    const controller = new Controller();
-    const body = controller.processRequest(req, res);
+    const router = new Router();
+    const body = router.chooseEndpointProcessor(req, res);
     res.end(body);
 });
 
