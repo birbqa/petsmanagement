@@ -7,11 +7,20 @@ export class Router {
         this.controller = new Controller();
     }
     chooseEndpointProcessor(req, res) {
-        for(let endpoint of endpoints) {
+        let endpointFound = false;
+        for (let endpoint of endpoints) {
             if (req.url === endpoint.url) {
-                return this.controller[endpoint.method](req, res);
+                if (req.method === endpoint.httpMethod) {
+                    return this.controller[endpoint.method](req, res);
+                }
+                 endpointFound = true;
             }
         }
-        res.statusCode = 404;
+        if (endpointFound) {
+            res.statusCode = 405;
+        } else {
+            res.statusCode = 404;
+        }
     }
 }
+
