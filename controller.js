@@ -25,4 +25,9 @@ export class Controller {
         ];
         return JSON.stringify(cats);
     }
+
+    // TODO: Implement saving cat entity
+    createCat(req, res) {
+        return "New cat added";
+    }
 }
