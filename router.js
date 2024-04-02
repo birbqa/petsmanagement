@@ -14,11 +14,11 @@ export class Router {
              res.statusCode = 404;
              return;
         }
-        for (let endpointByPath of endpointsByPath) {
-            if (req.method === endpointByPath.httpMethod) {
-                return this.controller[endpointByPath.method](req, res);
-            }
+        let endpoint = endpointsByPath[req.method];
+        if (endpoint === undefined) {
+                res.statusCode = 405;
+            return;
         }
-         res.statusCode = 405;
+        return this.controller[endpoint.method](req, res);
     }
 }

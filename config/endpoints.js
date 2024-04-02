@@ -1,25 +1,16 @@
 export const endpoints = {
-    "/": [
-        {
-            url: "/",
+    "/": {
+        "GET": {
             method: "root",
-            httpMethod: "GET",
         },
-    ],
-    "/cats": [
-        {
-            url: "/cats",
+    },
+    "/cats": {
+        "GET": {
             method: "cats",
-            httpMethod: "GET",
         },
-        {
-            url: "/cats",
+        "POST": {
             method: "createCat",
-            httpMethod: "POST",
         },
-    ],
+    },
 };
-
-
-
 
