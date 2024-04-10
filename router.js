@@ -1,11 +1,12 @@
 import {Controller} from "./controller.js";
 import {endpoints} from "./config/endpoints.js";
+import {CatRepository} from "./catRepository.js";
 
 export class Router {
     controller;
 
     constructor() {
-        this.controller = new Controller();
+        this.controller = new Controller(new CatRepository());
     }
 
     chooseEndpointProcessor(req, res) {

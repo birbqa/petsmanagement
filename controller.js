@@ -1,4 +1,9 @@
 export class Controller {
+    catRepository;
+
+    constructor(catRepository) {
+        this.catRepository = catRepository;
+    }
 
     root(req, res) {
         res.statusCode = 200;
@@ -9,20 +14,7 @@ export class Controller {
     cats(req, res) {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        const cats = [
-            {
-                "name": "Benya",
-                "age": 12,
-                "colour": "white-red",
-                "fur": "fluffy",
-            },
-            {
-                "name": "Monya",
-                "age": 6,
-                "colour": "white-black",
-                "fur": "fluffy",
-            },
-        ];
+        const cats = this.catRepository.getCats();
         return JSON.stringify(cats);
     }
 
