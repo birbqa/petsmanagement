@@ -12,5 +12,9 @@ export const endpoints = {
             method: "createCat",
         },
     },
+    "/cats/([0-9]+)": {
+        "DELETE": {
+            method: "deleteCat",
+        },
+    },
 };
-

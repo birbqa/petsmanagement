@@ -10,7 +10,20 @@ export class Router {
     }
 
     chooseEndpointProcessor(req, res) {
-        let endpointsByPath = endpoints[req.url];
+        let endpointsByPath;
+        let pathVariables;
+        let endpointsKeys = Object.keys(endpoints)
+        for(let key of endpointsKeys) {
+            let pattern = `^${key}$`;
+            const regex = new RegExp(pattern);
+            const found = req.url.match(regex);
+            if (found != null) {
+                pathVariables = Array.from(found);
+                pathVariables.shift();
+                endpointsByPath = endpoints[key];
+                break;
+            }
+        }
         if (endpointsByPath === undefined) {
              res.statusCode = 404;
              return;
@@ -20,6 +33,6 @@ export class Router {
                 res.statusCode = 405;
             return;
         }
-        return this.controller[endpoint.method](req, res);
+        return this.controller[endpoint.method](req, res, ...pathVariables);
     }
 }
