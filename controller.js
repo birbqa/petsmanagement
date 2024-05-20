@@ -37,8 +37,13 @@ export class Controller {
     }
 
     deleteCat(req, res, catId) {
-        catId = Number(catId);
-        this.catRepository.deleteCat(catId);
-        res.statusCode = 200;
+        try {
+            catId = Number(catId);
+            this.catRepository.deleteCat(catId);
+            res.statusCode = 200;
+        } catch (e) {
+            res.statusCode = 404;
+            return e.toString();
+        }
     }
 }
