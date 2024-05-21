@@ -1,12 +1,15 @@
-import {Controller} from "./controller.js";
+import {CatController} from "./controller/catController.js";
 import {endpoints} from "./config/endpoints.js";
 import {CatRepository} from "./catRepository.js";
+import {DogController} from "./controller/dogController.js";
 
 export class Router {
-    controller;
+    catController;
+    dogController;
 
     constructor() {
-        this.controller = new Controller(new CatRepository());
+        this.catController = new CatController(new CatRepository());
+        this.dogController = new DogController();
     }
 
     chooseEndpointProcessor(req, res) {
@@ -33,6 +36,8 @@ export class Router {
                 res.statusCode = 405;
             return;
         }
-        return this.controller[endpoint.method](req, res, ...pathVariables);
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        return this[endpoint.controller][endpoint.method](req, res, ...pathVariables);
     }
 }
