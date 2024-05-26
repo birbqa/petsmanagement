@@ -1,23 +1,28 @@
 export class Validator {
+
     validate(data, ruleSet) {
         for (const field in ruleSet) {
             let rules = ruleSet[field];
             for (const rule of rules) {
-                if (rule === "number") {
-                    if (typeof data[field] !== rule) {
-                        return false;
-                    }
-                } else if (rule === "string") {
-                    if (typeof data[field] !== rule) {
-                        return false;
-                    }
-                } else if (rule === "required") {
-                    if (!data.hasOwnProperty(field)) {
-                        return false;
-                    }
-                }
+               if (!this.chooseRuleAndCheck(rule, data, field)) {
+                   return false;
+               }
             }
         }
         return true;
+    }
+
+    chooseRuleAndCheck(rule, data, field) {
+        switch (rule) {
+            case "string":
+            case "number":
+                return this.checkValueType(data[field], rule);
+            case "required":
+                return data.hasOwnProperty(field);
+        }
+    }
+
+    checkValueType(value, type) {
+        return typeof value === type;
     }
 }
