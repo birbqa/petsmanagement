@@ -17,14 +17,6 @@ export class CatController {
     }
     // TODO: "add validation for existing cats ids
     createCat(req, res) {
-        if (req.body === undefined) {
-            res.statusCode = 400;
-            return "Incorrect data type";
-        }
-        if (typeof req.body.name != "string" || typeof req.body.age != "number" || typeof req.body.fur != "string" || typeof req.body.id != "number") {
-            res.statusCode = 400;
-            return "Incorrect object"
-        }
         let cat = new Cat(req.body.name, req.body.age, req.body.fur, req.body.id);
         this.catRepository.addCat(cat);
         return "new cat added";

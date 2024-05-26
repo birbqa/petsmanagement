@@ -2,14 +2,17 @@ import {CatController} from "./controller/catController.js";
 import {endpoints} from "./config/endpoints.js";
 import {CatRepository} from "./catRepository.js";
 import {DogController} from "./controller/dogController.js";
+import {Validator} from "./validator.js";
 
 export class Router {
     catController;
     dogController;
+    validator;
 
     constructor() {
         this.catController = new CatController(new CatRepository());
         this.dogController = new DogController();
+        this.validator = new Validator();
     }
 
     chooseEndpointProcessor(req, res) {
@@ -33,8 +36,15 @@ export class Router {
         }
         let endpoint = endpointsByPath[req.method];
         if (endpoint === undefined) {
-                res.statusCode = 405;
+            res.statusCode = 405;
             return;
+        }
+        if (
+            endpoint.validation !== undefined
+            && !this.validator.validate(req.body, endpoint.validation)
+        ) {
+            res.statusCode = 400;
+            return "Incorrect body";
         }
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');

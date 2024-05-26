@@ -13,6 +13,12 @@ export const endpoints = {
         "POST": {
             method: "createCat",
             controller: "catController",
+            validation: {
+                id: ["number", "required"],
+                name: ["string","required"],
+                fur: ["string","required"],
+                age: ["number", "required"],
+            },
         },
     },
     "/cats/([0-9]+)": {
