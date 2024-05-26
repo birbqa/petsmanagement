@@ -3,6 +3,10 @@ export class Validator {
     validate(data, ruleSet) {
         for (const field in ruleSet) {
             let rules = ruleSet[field];
+            if (!rules.includes("required") && data[field] === undefined) {
+                continue;
+            }
+
             for (const rule of rules) {
                if (!this.chooseRuleAndCheck(rule, data, field)) {
                    return false;
