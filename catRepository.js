@@ -14,10 +14,19 @@ export class CatRepository {
         return Object.values(this.catsObject);
     }
 
+    getCat(id) {
+        this.isCatExist(id);
+        return this.catsObject[id];
+    }
+
     deleteCat(id) {
-       if (!this.catsObject.hasOwnProperty(id)) {
-           throw new Error(`Cat with id ${id} not found`)
-       }
+        this.isCatExist(id);
         delete this.catsObject[id];
+    }
+
+    isCatExist(id) {
+        if (!this.catsObject.hasOwnProperty(id)) {
+            throw new Error(`Cat with id ${id} not found`)
+        }
     }
 }

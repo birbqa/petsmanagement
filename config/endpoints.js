@@ -22,6 +22,10 @@ export const endpoints = {
         },
     },
     "/cats/([0-9]+)": {
+        "GET": {
+            method: "getCat",
+            controller: "catController",
+        },
         "DELETE": {
             method: "deleteCat",
             controller: "catController",

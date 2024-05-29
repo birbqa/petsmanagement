@@ -8,9 +8,9 @@ export class Validator {
             }
 
             for (const rule of rules) {
-               if (!this.chooseRuleAndCheck(rule, data, field)) {
-                   return false;
-               }
+                if (!this.chooseRuleAndCheck(rule, data, field)) {
+                    return false;
+                }
             }
         }
         return true;

@@ -31,4 +31,15 @@ export class CatController {
             return e.toString();
         }
     }
+
+    getCat(req, res, catId) {
+        try {
+            let cat = this.catRepository.getCat(catId);
+            res.statusCode = 200;
+            return JSON.stringify(cat);
+        } catch(e) {
+            res.statusCode = 404;
+            return e.message;
+        }
+    }
 }
