@@ -8,18 +8,18 @@ export class CatController {
     }
 
     root() {
-        return "\"Cats live here!\"";
+        return "Cats live here!";
     }
 
     getCats() {
-        const cats = this.catRepository.getCats();
-        return JSON.stringify(cats);
+        return this.catRepository.getCats();
+
     }
     // TODO: "add validation for existing cats ids
     createCat(req, res) {
         let cat = new Cat(req.body.name, req.body.age, req.body.fur, req.body.id);
         this.catRepository.addCat(cat);
-        return "new cat added";
+        return cat;
     }
 
     deleteCat(req, res, catId) {
@@ -28,15 +28,14 @@ export class CatController {
             this.catRepository.deleteCat(catId);
         } catch (e) {
             res.statusCode = 404;
-            return e.toString();
+            return e.message;
         }
     }
 
     getCat(req, res, catId) {
         try {
             let cat = this.catRepository.getCat(catId);
-            res.statusCode = 200;
-            return JSON.stringify(cat);
+            return cat;
         } catch(e) {
             res.statusCode = 404;
             return e.message;

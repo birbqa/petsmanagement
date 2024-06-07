@@ -48,6 +48,7 @@ export class Router {
         }
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        return this[endpoint.controller][endpoint.method](req, res, ...pathVariables);
+        let controllerMethodResult = this[endpoint.controller][endpoint.method](req, res, ...pathVariables);
+        return JSON.stringify(controllerMethodResult);
     }
 }

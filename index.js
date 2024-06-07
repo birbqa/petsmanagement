@@ -3,7 +3,7 @@ import {Router} from "./router.js";
 
 const hostname = '127.0.0.1';
 const port = 3000;
-const router = new Router();
+const router = new Router;
 
 http.createServer((request, response) => {
     const { headers, method, url } = request;
@@ -20,7 +20,6 @@ http.createServer((request, response) => {
             if (method !== "GET" && requestBody) {
                 request.body = JSON.parse(requestBody);
             }
-            // BEGINNING OF NEW STUFF
             response.on('error', err => {
                 console.error(err);
             });
