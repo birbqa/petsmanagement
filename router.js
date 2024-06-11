@@ -1,18 +1,14 @@
-import {CatController} from "./controller/catController.js";
-import {endpoints} from "./config/endpoints.js";
-import {CatRepository} from "./catRepository.js";
-import {DogController} from "./controller/dogController.js";
-import {Validator} from "./validator.js";
+import  {endpoints} from "./config/endpoints.js";
 
 export class Router {
     catController;
     dogController;
     validator;
 
-    constructor() {
-        this.catController = new CatController(new CatRepository());
-        this.dogController = new DogController();
-        this.validator = new Validator();
+    constructor(catController,dogController, validator) {
+        this.catController = catController;
+        this.dogController = dogController;
+        this.validator = validator;
     }
 
     chooseEndpointProcessor(req, res) {
