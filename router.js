@@ -14,6 +14,7 @@ export class Router {
     chooseEndpointProcessor(req, res) {
         let endpointsByPath;
         let pathVariables;
+        let endpointResult;
         let endpointsKeys = Object.keys(endpoints)
         for(let key of endpointsKeys) {
             let pattern = `^${key}$`;
@@ -40,11 +41,13 @@ export class Router {
             && !this.validator.validate(req.body, endpoint.validation)
         ) {
             res.statusCode = 400;
-            return "Incorrect body";
+            endpointResult = "Incorrect body";
+        } else {
+            res.statusCode = 200;
+            console.log(`calling ${req.url}`);
+            endpointResult = this[endpoint.controller][endpoint.method](req, res, ...pathVariables)
         }
-        res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        let controllerMethodResult = this[endpoint.controller][endpoint.method](req, res, ...pathVariables);
-        return JSON.stringify(controllerMethodResult);
+        return JSON.stringify(endpointResult);
     }
 }
