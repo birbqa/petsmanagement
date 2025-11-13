@@ -1,9 +1,15 @@
 import * as http from 'http';
 import {Router} from "./router.js";
-
+import {DogController} from "./controller/dogController.js";
+import {CatController} from "./controller/catController.js";
+import {CatRepository} from "./catRepository.js";
+import {Validator} from "./validator.js";
 const hostname = '127.0.0.1';
 const port = 3000;
-const router = new Router;
+const dogController = new DogController();
+const catController = new CatController(new CatRepository());
+const validator = new Validator();
+const router = new Router(catController, dogController, validator);
 
 http.createServer((request, response) => {
     const { headers, method, url } = request;
