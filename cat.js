@@ -9,6 +9,7 @@ export class Cat {
         this.age = age;
         this.fur = fur;
         this.id = id;
+
     }
 }
 
