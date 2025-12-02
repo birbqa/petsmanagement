@@ -4,7 +4,7 @@ import {DogController} from "./controller/dogController.js";
 import {CatController} from "./controller/catController.js";
 import {CatRepository} from "./catRepository.js";
 import {Validator} from "./validator.js";
-import mysql from "mysql2";
+import mysql from "mysql2/promise";
 const creds = {
     host: 'localhost',
     user: 'root',
@@ -13,7 +13,7 @@ const creds = {
 const hostname = '127.0.0.1';
 const port = 3000;
 const dogController = new DogController();
-let createdConnection = mysql.createConnection(creds);
+let createdConnection = await mysql.createConnection(creds);
 const catController = new CatController(new CatRepository(createdConnection));
 const validator = new Validator();
 const router = new Router(catController, dogController, validator);
