@@ -4,10 +4,17 @@ import {DogController} from "./controller/dogController.js";
 import {CatController} from "./controller/catController.js";
 import {CatRepository} from "./catRepository.js";
 import {Validator} from "./validator.js";
+import mysql from "mysql2/promise";
+const creds = {
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'pets'}
 const hostname = '127.0.0.1';
 const port = 3000;
 const dogController = new DogController();
-const catController = new CatController(new CatRepository());
+let createdConnection = await mysql.createConnection(creds);
+const catController = new CatController(new CatRepository(createdConnection));
 const validator = new Validator();
 const router = new Router(catController, dogController, validator);
 
@@ -21,7 +28,7 @@ http.createServer((request, response) => {
         .on('data', chunk => {
             requestBody.push(chunk);
         })
-        .on('end', () => {
+        .on('end', async () => {
             requestBody = Buffer.concat(requestBody).toString();
             if (method !== "GET" && requestBody) {
                 request.body = JSON.parse(requestBody);
@@ -30,7 +37,7 @@ http.createServer((request, response) => {
                 console.error(err);
             });
 
-            const responseBody = router.chooseEndpointProcessor(request, response);
+            const responseBody = await router.chooseEndpointProcessor(request, response);
             response.end(responseBody);
         });
     })
