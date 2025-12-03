@@ -1,5 +1,4 @@
 import {Cat} from "./cat.js";
-import mysql from 'mysql2/promise';
 
 export class CatRepository {
     catsObject = {
@@ -22,8 +21,7 @@ export class CatRepository {
                 'SELECT * FROM `cats`',
                 []
             );
-            console.log('Query results:', rows);
-            return rows;
+            return rows.map(this.#buildCat);
         } catch (error) {
             console.error('Error executing query:', error);
          }
@@ -32,12 +30,12 @@ export class CatRepository {
     
     async getCat(id) {
         try {
-            const [rows, fields] = await this.connection.execute(
+            const [[row], fields] = await this.connection.execute(
                 'SELECT * FROM `cats` WHERE `id` = ? LIMIT 1',
                 [id]
             );
-            console.log('Query results:', rows);
-            return rows[0];
+            console.log('Query results:', row);
+            return this.#buildCat(row);
         } catch (error) {
             console.error('Error executing query:', error);
         }
@@ -53,5 +51,7 @@ export class CatRepository {
             throw new Error(`Cat with id ${id} not found`)
         }
     }
-
+    #buildCat(dbCatObject) {
+        return new Cat(dbCatObject.id, dbCatObject.Name, dbCatObject.Gender, dbCatObject.Colour, dbCatObject.Character, dbCatObject.Age);
+    }
 }
