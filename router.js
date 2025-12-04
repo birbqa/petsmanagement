@@ -23,7 +23,6 @@ export class Router {
             console.log(found)
             if (found != null) {
                 pathVariables = Array.from(found);
-                console.log(pathVariables, " HEYLLL");
                 pathVariables.shift();
                 endpointsByPath = endpoints[key];
                 break;
@@ -47,7 +46,6 @@ export class Router {
         } else {
             res.statusCode = 200;
             console.log(`calling ${req.url}`);
-            //this.castController.getCats(req,res,pathVariables)
             endpointResult = await this[endpoint.controller][endpoint.method](req, res, ...pathVariables)
         }
         res.setHeader('Content-Type', 'application/json');

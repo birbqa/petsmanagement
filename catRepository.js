@@ -7,6 +7,7 @@ export class CatRepository {
         3: new Cat("Monya", 6, "black-white", 3),
     };
     connection;
+
     constructor(connection) {
         this.connection = connection;
     }
