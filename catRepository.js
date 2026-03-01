@@ -13,7 +13,16 @@ export class CatRepository {
     }
 
     async addCat(cat) {
-        this.catsObject[cat.id] = cat;
+        const catInfo = [cat.name, cat.gender, cat.colour, cat.character, cat.age];
+        try {
+            let result = await this.connection.execute(
+                'INSERT INTO `cats` (`name`, `gender`, `colour`, `character`, `age`) VALUES (?, ?, ?, ?, ?)',
+                catInfo
+            );
+            return await this.getCat(result[0].insertId);
+        } catch (error) {
+            console.error('Error executing query:', error);
+        }
     }
 
     async getCats() {
@@ -30,6 +39,7 @@ export class CatRepository {
 
     
     async getCat(id) {
+        // TODO: write logic for cat which doesn't exist
         try {
             const [[row], fields] = await this.connection.execute(
                 'SELECT * FROM `cats` WHERE `id` = ? LIMIT 1',
@@ -43,8 +53,16 @@ export class CatRepository {
     }
 
     async deleteCat(id) {
-        this.isCatExist(id);
-        delete this.catsObject[id];
+        try {
+            await this.connection.execute(
+                'DELETE  FROM `cats` WHERE `id` = ?',
+                [id]
+            );
+            // TODO: move this to controller return `Cat with ${id} is deleted`;
+        } catch (error) {
+            console.error('Error executing query:', error);
+            throw error;
+        }
     }
 //todo: rewrite to return boolean
     isCatExist(id) {
@@ -53,6 +71,6 @@ export class CatRepository {
         }
     }
     #buildCat(dbCatObject) {
-        return new Cat(dbCatObject.id, dbCatObject.Name, dbCatObject.Gender, dbCatObject.Colour, dbCatObject.Character, dbCatObject.Age);
+        return new Cat(dbCatObject.name, dbCatObject.gender, dbCatObject.colour, dbCatObject.character, dbCatObject.age, dbCatObject.id);
     }
 }

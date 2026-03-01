@@ -16,9 +16,8 @@ export class CatController {
     }
     // TODO: "add validation for existing cats ids
     async createCat(req, res) {
-        let cat = new Cat(req.body.name, req.body.age, req.body.fur, req.body.id);
-        await this.catRepository.addCat(cat);
-        return cat;
+        let cat = new Cat(req.body.name, req.body.gender, req.body.colour, req.body.character, req.body.age);
+        return await this.catRepository.addCat(cat);
     }
 
    async deleteCat(req, res, catId) {
@@ -32,6 +31,7 @@ export class CatController {
     }
 
    async getCat(req, res, catId) {
+       // TODO: write logic for cat which doesn't exist
         try {
             return await this.catRepository.getCat(catId);
         } catch(e) {

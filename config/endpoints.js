@@ -14,9 +14,10 @@ export const endpoints = {
             method: "createCat",
             controller: "catController",
             validation: {
-                id: ["number", "required"],
                 name: ["string","required"],
-                fur: ["string","required"],
+                gender: ["string", "required"],
+                colour: ["string","required"],
+                character: ["string","required"],
                 age: ["number", "required"],
             },
         },
