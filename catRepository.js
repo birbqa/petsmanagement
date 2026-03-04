@@ -1,4 +1,5 @@
 import {Cat} from "./cat.js";
+import {RepositoryNotFoundException} from "./exception/RepositoryNotFoundException.js";
 
 export class CatRepository {
     catsObject = {
@@ -54,11 +55,13 @@ export class CatRepository {
 
     async deleteCat(id) {
         try {
-            await this.connection.execute(
+            let [{affectedRows}] = await this.connection.execute(
                 'DELETE  FROM `cats` WHERE `id` = ?',
                 [id]
             );
-            // TODO: move this to controller return `Cat with ${id} is deleted`;
+            if (affectedRows === 0) {
+                throw new RepositoryNotFoundException(`Cat with id ${id} doesn't exist`);
+            }
         } catch (error) {
             console.error('Error executing query:', error);
             throw error;

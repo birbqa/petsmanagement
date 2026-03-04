@@ -24,16 +24,22 @@ export class CatController {
         try {
             catId = Number(catId);
             await this.catRepository.deleteCat(catId);
+            return `Cat with id ${catId} was deleted`
         } catch (e) {
-            res.statusCode = 404;
+            res.statusCode = e.name === "RepositoryNotFoundException" ? 400 : 500;
             return e.message;
         }
     }
 
    async getCat(req, res, catId) {
-       // TODO: write logic for cat which doesn't exist
+       // TODO: write logic for cat which doesn't exist -> REFACTOR GETCAT TO UTILIZE THE SAME APPROACH AS DELETE CAT
         try {
-            return await this.catRepository.getCat(catId);
+            if (await this.catRepository.getCat(catId) === undefined) {
+                res.statusCode = 404;
+                return `Cat with id ${catId} doesn't exist`
+            } else {
+                return await this.catRepository.getCat(catId);
+            }
         } catch(e) {
             res.statusCode = 404;
             return await e.message;
