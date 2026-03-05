@@ -35,6 +35,7 @@ export class CatRepository {
             return rows.map(this.#buildCat);
         } catch (error) {
             console.error('Error executing query:', error);
+            throw error;
          }
     }
 
@@ -46,10 +47,13 @@ export class CatRepository {
                 'SELECT * FROM `cats` WHERE `id` = ? LIMIT 1',
                 [id]
             );
-            console.log('Query results:', row);
+            if (row === undefined) {
+                throw new RepositoryNotFoundException(`Cat with id ${id} doesn't exist`)
+            }
             return this.#buildCat(row);
         } catch (error) {
             console.error('Error executing query:', error);
+            throw error;
         }
     }
 

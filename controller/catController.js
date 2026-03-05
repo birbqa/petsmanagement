@@ -11,10 +11,15 @@ export class CatController {
         return "Cats live here!";
     }
 
-    async getCats() {
-       return await this.catRepository.getCats();
+    async getCats(req, res) {
+        try {
+            return await this.catRepository.getCats();
+        } catch (e) {
+            res.statusCode = 500;
+            return e.message;
+        }
     }
-    // TODO: "add validation for existing cats ids
+
     async createCat(req, res) {
         let cat = new Cat(req.body.name, req.body.gender, req.body.colour, req.body.character, req.body.age);
         return await this.catRepository.addCat(cat);
@@ -32,16 +37,10 @@ export class CatController {
     }
 
    async getCat(req, res, catId) {
-       // TODO: write logic for cat which doesn't exist -> REFACTOR GETCAT TO UTILIZE THE SAME APPROACH AS DELETE CAT
         try {
-            if (await this.catRepository.getCat(catId) === undefined) {
-                res.statusCode = 404;
-                return `Cat with id ${catId} doesn't exist`
-            } else {
-                return await this.catRepository.getCat(catId);
-            }
+            return await this.catRepository.getCat(catId);
         } catch(e) {
-            res.statusCode = 404;
+            res.statusCode = e.name === "RepositoryNotFoundException" ? 400 : 500;
             return await e.message;
         }
     }
