@@ -1,18 +1,18 @@
 export class Cat {
     name;
     age;
-    id;
     gender;
     colour;
     character;
+    id;
 
-    constructor(id, name, gender, colour, character, age) {
-        this.id = id;
+    constructor(name, gender, colour, character, age, id = null) {
         this.name = name;
         this.gender = gender;
         this.colour = colour;
         this.character = character;
         this.age = age;
+        this.id = id;
     }
 }
 
