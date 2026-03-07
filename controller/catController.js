@@ -21,8 +21,13 @@ export class CatController {
     }
 
     async createCat(req, res) {
-        let cat = new Cat(req.body.name, req.body.gender, req.body.colour, req.body.character, req.body.age);
-        return await this.catRepository.addCat(cat);
+        try {
+            let cat = new Cat(req.body.name, req.body.gender, req.body.colour, req.body.character, req.body.age);
+            return await this.catRepository.addCat(cat);
+        } catch (e) {
+            res.statusCode = 500;
+            return e.message
+        }
     }
 
    async deleteCat(req, res, catId) {

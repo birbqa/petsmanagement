@@ -2,11 +2,6 @@ import {Cat} from "./cat.js";
 import {RepositoryNotFoundException} from "./exception/RepositoryNotFoundException.js";
 
 export class CatRepository {
-    catsObject = {
-        1: new Cat("Tashenka", 5, "red", 1),
-        2: new Cat("Benya", 12, "white", 2),
-        3: new Cat("Monya", 6, "black-white", 3),
-    };
     connection;
 
     constructor(connection) {
@@ -16,19 +11,20 @@ export class CatRepository {
     async addCat(cat) {
         const catInfo = [cat.name, cat.gender, cat.colour, cat.character, cat.age];
         try {
-            let result = await this.connection.execute(
+            let [{insertId}] = await this.connection.execute(
                 'INSERT INTO `cats` (`name`, `gender`, `colour`, `character`, `age`) VALUES (?, ?, ?, ?, ?)',
                 catInfo
             );
-            return await this.getCat(result[0].insertId);
+            return await this.getCat(insertId);
         } catch (error) {
             console.error('Error executing query:', error);
+            throw(error);
         }
     }
 
     async getCats() {
         try {
-            const [rows, fields] = await this.connection.execute(
+            const [rows] = await this.connection.execute(
                 'SELECT * FROM `cats`',
                 []
             );
@@ -41,9 +37,8 @@ export class CatRepository {
 
     
     async getCat(id) {
-        // TODO: write logic for cat which doesn't exist
         try {
-            const [[row], fields] = await this.connection.execute(
+            const [[row]] = await this.connection.execute(
                 'SELECT * FROM `cats` WHERE `id` = ? LIMIT 1',
                 [id]
             );
@@ -71,12 +66,7 @@ export class CatRepository {
             throw error;
         }
     }
-//todo: rewrite to return boolean
-    isCatExist(id) {
-        if (!this.catsObject.hasOwnProperty(id)) {
-            throw new Error(`Cat with id ${id} not found`)
-        }
-    }
+
     #buildCat(dbCatObject) {
         return new Cat(dbCatObject.name, dbCatObject.gender, dbCatObject.colour, dbCatObject.character, dbCatObject.age, dbCatObject.id);
     }
